@@ -27,6 +27,7 @@ public class AutorDAO {
     public ArrayList<Autor> listarAutores() throws Exception {
         try {
             EntityManager em = Persistence.createEntityManagerFactory("LibreriaPU").createEntityManager();
+            //JPQL (Mezcla entre Java y SQL)
             return (ArrayList<Autor>) em.createQuery("Select a From Autor a Order By a.nombre ").getResultList();
         } catch (Exception e) {
             throw new Exception("La consulta no devuelve datos");

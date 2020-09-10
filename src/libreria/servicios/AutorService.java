@@ -65,17 +65,51 @@ public class AutorService {
             throw new Exception(e.getMessage());
         }
     }
-    
-    public Autor buscarAutor(String idAutor) throws Exception {
+
+    public Autor buscarAutorPorID(String idAutor) throws Exception {
         Autor autor = null;
         try {
             if (idAutor.trim().isEmpty()) {
                 throw new Exception("Debe indicar un id de autor");
             } else {
-                autor = autorDao.buscarAutor(idAutor);
+                return autor = autorDao.buscarAutor(idAutor);
+            }
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    public void modificarAutor(String id, String nombre) throws Exception {
+        try {
+            if (id == null) {
+                throw new Exception("No se pudo identificar el ID para modificar el autor");
+            }
+            if (nombre == null) {
+                throw new Exception("Debe indicar el Nombre del autor para poder modificarlo");
+            } else {
+                autorDao.modificarAutor(id, nombre);
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
+        }
+    }
+
+    public void eliminarAutor(String id) throws Exception {
+        try {
+            if (id == null) {
+                throw new Exception("Debe indicar el ID del autor que quiere eliminar");
+            } else {
+                autorDao.eliminarAutor(id);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    public void imprimirAutores(ArrayList<Autor> autores) {
+        
+        for (Autor autor : autores) {
+            System.out.println(autor.toString());
         }
     }
 

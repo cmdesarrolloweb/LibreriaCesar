@@ -5,10 +5,19 @@
  */
 package libreria.dao;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Persistence;
+
 /**
  *
  * @author cesarminetti
  */
 public class ClienteDAO {
+    
+    public void guardarCliente(Integer documento, String nombre, String apellido, String domicilio, String telefono) {
+        
+        EntityManager em = Persistence.createEntityManagerFactory("LibreriaPU").createEntityManager();
+        
+    }
     
 }
