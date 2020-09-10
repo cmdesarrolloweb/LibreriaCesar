@@ -1,5 +1,6 @@
 package libreria.entidades;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -9,6 +10,7 @@ public class Autor {
     @Id
     private String id;
    
+    @Column(nullable = false)
     private String nombre;
 
     public String getId() {
@@ -30,7 +32,7 @@ public class Autor {
     
     @Override
     public String toString() {
-        return nombre;
+        return "Autor: " + nombre + ". ID: " + id;
     }
     
     

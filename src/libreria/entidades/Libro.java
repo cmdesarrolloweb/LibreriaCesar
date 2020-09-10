@@ -1,5 +1,6 @@
 package libreria.entidades;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -9,9 +10,13 @@ public class Libro {
     
     @Id
     private Integer isbn;
+    
+    @Column(nullable = false)
     private String titulo;
     private Integer anio; 
     private Integer prestados;
+    
+    @Column(nullable = false)
     private Integer ejemplares;
     
     @ManyToOne
@@ -19,8 +24,19 @@ public class Libro {
     
     @ManyToOne
     private Editorial editorial; 
-    
-    
+
+    public Libro() {
+    }
+
+    public Libro(Integer isbn, String titulo, Integer anio, Integer prestados, Integer ejemplares, Autor autor, Editorial editorial) {
+        this.isbn = isbn;
+        this.titulo = titulo;
+        this.anio = anio;
+        this.prestados = prestados;
+        this.ejemplares = ejemplares;
+        this.autor = autor;
+        this.editorial = editorial;
+    }
     
     public Integer getIsbn() {
         return isbn;
@@ -105,6 +121,11 @@ public class Libro {
         this.editorial = editorial;
     }
 
-    
+    @Override
+    public String toString() {
+        return "Libro ISBN: " + isbn + ". Titulo" + titulo
+                + ". Autor: " + autor.getNombre() + ". Editorial: " + editorial.getNombre()
+                + ". \nEjemplares: " + ejemplares + ". Prestaados: " + prestados;
+    }
     
 }

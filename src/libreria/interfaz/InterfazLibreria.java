@@ -1,66 +1,41 @@
 package libreria.interfaz;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.List;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import libreria.entidades.Cliente;
+
 import libreria.entidades.Libro;
-import libreria.dao.AutorDAO;
-import libreria.dao.EditorialDAO;
-import libreria.dao.LibroDAO;
+
+import libreria.servicios.AutorService;
+import libreria.servicios.ClienteService;
+import libreria.servicios.EditorialService;
+import libreria.servicios.LibroService;
 
 public class InterfazLibreria {
-    
 
-    private EditorialDAO editorialDAO;
-    private AutorDAO autorDAO;
-    private LibroDAO libroDAO;
-    
-    private BufferedReader teclado;
-    
-    public InterfazLibreria() {
-        this.editorialDAO = new EditorialDAO();
-        this.autorDAO = new AutorDAO();
-        this.libroDAO = new LibroDAO();
-        this.teclado = new BufferedReader(new InputStreamReader(System.in));
-    }
-    
-    public String leerCadena(){
-        String cadena = null;
-        try {
-            cadena = teclado.readLine();
-        } catch (IOException ex) {
-            Logger.getLogger(InterfazLibreria.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return cadena;
-    }
-    
-    
-    public Integer leerNumero(){
-        String cadena = "0";
-        try {
-            cadena = teclado.readLine();
-        } catch (IOException ex) {
-            Logger.getLogger(InterfazLibreria.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        return new Integer(cadena);
-    }
-    
-    
+    private EditorialService editorialServicio;
+    private AutorService autorService;
+    private LibroService libroService;
+    private ClienteService clienteService;
+    private PrestamoService prestamoService;
+
+//    private BufferedReader teclado;
+//
+//    public InterfazLibreria() {
+//        this.editorialServicio = new EditorialService();
+//        this.autorServicio = new AutorService();
+//        this.libroServicio = new LibroService();
+//        this.prestamoServicio = new PrestamoService();
+//    }
     public void menu() throws Exception {
+        Scanner leer = new Scanner(System.in).useDelimiter("\n");
         System.out.println("Seleccione la opción:");
         System.out.println("=====================================");
-        
+
         System.out.println(" 1- Crear Autor");
         System.out.println(" 2- Crear Editorial");
         System.out.println(" 3- Crear Libro");
         System.out.println(" 4- Agregar Ejemplares");
-        
+
         System.out.println(" 5- Mostrar Libros");
         System.out.println(" 6- Mostrar Libros x Autor");
         System.out.println(" 7- Mostrar Libros x Titulo");
@@ -68,135 +43,54 @@ public class InterfazLibreria {
 
         System.out.println(" 9- Prestamo");
         System.out.println(" 10- Devolución");
-        
+
         System.out.println(" 0- Salir");
-        
-                
-        int opcion = leerNumero();
-        switch(opcion){
-            case 1: 
+
+        int opcion = leer.nextInt();
+        switch (opcion) {
+            case 1:
                 autorServicio.crearAutor();
                 break;
             case 2:
-                crearEditorial();
+                editorialServicio.crearEditorial();
                 break;
             case 3:
-                crearLibro();
+                libroServicio.crearLibro();
                 break;
             case 4:
-                agregarEjemplar();
+                libroServicio.actualizarEjemplares();
                 break;
-            case 5:      
-                mostrarLibros();
+            case 5:
+                libroServicio.listarLibros();
                 break;
-            case 6:      
-                mostrarLibrosDeAutor();
+            case 6:
+                libroServicio.mostrarLibrosDeAutor();
                 break;
-            case 7:      
-                mostrarLibrosPorTitulo();
+            case 7:
+                libroServicio.mostrarLibrosPorTitulo();
                 break;
-            case 8:      
-                mostrarLibrosPorISBN();
+            case 8:
+                libroServicio.mostrarLibrosPorISBN();
                 break;
-            case 9:      
-                prestamo();
+            case 9:
+                Libro libro = libroServicio.perstarLibro();
+                Cliente cliente = clienteServicio.buscarCliente();
+
+                if (cliente == null) {
+                    cliente = clienteServicio.crearCliente();
+                }
+                prestamoServicio.crearPrestamo(libro, cliente);
                 break;
-            case 10:      
-                devolucion();
+            case 10:
+                
                 break;
+            case 11:
+                clienteServicio.crearCliente();
             case 0:
                 System.exit(-1);
                 break;
         }
-        
-    }
-    
-    public void crearAutor(){
-        System.out.println("Ingrese nombre del autor:");
-        String nombre = leerCadena();
-        autorDAO.guardar(nombre);
-        
-    }
-    
-    public void crearEditorial(){
-        System.out.println("Ingrese nombre de la editorial:");
-        String nombre = leerCadena();
-        editorialDAO.guardar(nombre);
-        
-    }
-    
-    public void crearLibro(){
-        System.out.println("Ingrese ISBN del libro:");
-        Integer isbn = leerNumero();
-        
-
-        System.out.println("Ingrese titulo del libro:");
-        String titulo = leerCadena();
-        
-        
-        System.out.println("Ingrese el año de publicacion del libro:");
-        Integer anio = leerNumero();
-        
-
-        System.out.println("Ingrese ID de autor:");
-        String idAutor = leerCadena();
-        
-        
-        System.out.println("Ingrese ID de editorial:");
-        String idEditorial = leerCadena();
- 
-        System.out.println("Ingrese la cantidad de ejemplares:");
-        Integer ejemplares = leerNumero();
- 
-        
-        libroDAO.guardar(isbn, titulo, anio, idAutor, idEditorial, ejemplares);
-    }
-    
-    public void agregarEjemplar(){
-        System.out.println("Ingrese ISBN del libro:");
-        Integer isbn = leerNumero();
- 
-        System.out.println("Ingrese la cantidad de ejemplares:");
-        Integer ejemplares = leerNumero();
-
-        libroDAO.actualizarEjemplares(isbn, ejemplares);
-    }
-    
-    public void mostrarLibros(){
-        List<Libro> libros = libroDAO.buscarLibros();
-        imprimirLibros(libros);
-    }
-
-
-    public void mostrarLibrosDeAutor(){
- 
-        System.out.println("Ingrese el nombre del autor:");
-        String autor = leerCadena();
-        
-        List<Libro> libros = libroDAO.buscarLibrosPorAutor(autor);
-        imprimirLibros(libros);
-    }
-    
-    public void mostrarLibrosPorISBN(){
 
     }
 
-    public void mostrarLibrosPorTitulo(){
-
-    }
-    
-    public void imprimirLibros(List<Libro> libros){
-        for(Libro libro : libros){
-            System.out.println("ISBN: " + libro.getIsbn() + " " + libro.getTitulo() + " " + libro.getAutor());
-        }
-    }
-    
-    public void prestamo(){
-        
-    }
-    
-    public void devolucion(){
-        
-    }
-    
 }
