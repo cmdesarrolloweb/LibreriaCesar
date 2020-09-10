@@ -1,7 +1,8 @@
 package libreria.entidades;
 
 import java.util.Date;
-import java.util.List;
+import javax.persistence.Column;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -14,16 +15,31 @@ public class Prestamo {
     private String id;
     
     @ManyToOne
-    private Libro libros;
+    @Column(nullable = false)
+    private Libro libro;
     
     @ManyToOne
+    @Column(nullable = false)
     private Cliente cliente;
-    @Temporal(javax.persistence.TemporalType.DATE)
     
+    @Temporal(javax.persistence.TemporalType.DATE)
+    @Column(name = "fecha_prestamo", nullable = false)
     private Date fecha;
-    @Temporal(javax.persistence.TemporalType.DATE)
     
+    @Temporal(javax.persistence.TemporalType.DATE)
+    @Column(name = "fecha_devolucion", nullable = false)
     private Date devolucion;
+
+    public Prestamo() {
+    }
+
+    public Prestamo(String id, Libro libros, Cliente cliente, Date fecha, Date devolucion) {
+        this.id = id;
+        this.libro = libros;
+        this.cliente = cliente;
+        this.fecha = fecha;
+        this.devolucion = devolucion;
+    }
 
     public String getId() {
         return id;
@@ -33,12 +49,12 @@ public class Prestamo {
         this.id = id;
     }
 
-    public Libro getLibros() {
-        return libros;
+    public Libro getLibro() {
+        return libro;
     }
 
-    public void setLibros(Libro libros) {
-        this.libros = libros;
+    public void setLibro(Libro libros) {
+        this.libro = libro;
     }
 
     public Cliente getCliente() {
@@ -65,5 +81,9 @@ public class Prestamo {
         this.devolucion = devolucion;
     }
     
+    @Override
+    public String toString() {
+        return "Prestamo{" + "id=" + id + ", libro=" + libro + ", cliente=" + cliente + ", fecha=" + fecha + ", devolucion=" + devolucion + '}';
+    }
     
 }

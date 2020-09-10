@@ -1,6 +1,7 @@
 package libreria.entidades;
 
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -11,10 +12,18 @@ public class Cliente {
     
     @Id
     private int documento;
+    
+    @Column(nullable = false)
     private String nombre;
+    
+    @Column(nullable = false)
     private String apellido;
+    
     private String domicilio;
+    
+    @Column(nullable = false)
     private String telefono;
+    
     @OneToMany(mappedBy = "cliente")
     private List<Prestamo> prestamos;
 
@@ -88,5 +97,9 @@ public class Cliente {
         this.telefono = telefono;
     }
     
+    @Override
+    public String toString() {
+        return "Cliente{" + "documento=" + documento + ", nombre=" + nombre + ", apellido=" + apellido + ", domicilio=" + domicilio + ", telefono=" + telefono + ", prestamos=" + prestamos + '}';
+    }
     
 }
